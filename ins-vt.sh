@@ -503,7 +503,7 @@ wget -O cek-tr "https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/
 wget -O renew-ws "https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/renew-ws.sh"
 wget -O renew-vless "https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/renew-vless.sh"
 wget -O renew-tr "https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/renew-tr.sh"
-wget -O certv2ray "https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/cert.sh"
+wget -O certv2ray "https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/certv2ray.sh"
 chmod +x add-ws
 chmod +x add-vless
 chmod +x add-tr
