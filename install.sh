@@ -51,6 +51,8 @@ wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/wg.sh 
 wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ins-vt.sh && chmod +x ins-vt.sh && ./ins-vt.sh
 #install L2TP
 wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ipsec.sh && chmod +x ipsec.sh && ./ipsec.sh
+#br-set
+wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/set-br.sh && chmod +x set-br.sh && ./set-br.sh
 # Set Index
 cd /home/vps/public_html
 wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/index.html
