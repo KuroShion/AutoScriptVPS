@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "${EUID}" -ne 0 ]; then
-		echo "You need to run this script as root"
+		echo "You need to run this script as root to install correctly"
 		exit 1
 fi
 if [ "$(systemd-detect-virt)" == "openvz" ]; then
@@ -20,7 +20,7 @@ success="\e[92m"
 echo -e "\n[${warning}Permission$based] > Masukan Password :"
 read -r -s Password
 case "$Password" in
-  evoteammalaysia )
+  evoteammalaysia0329 )
     echo -e "\n[${success}SUCCESS$based] > Password benar"
     echo -e "[${warning}Output$based]  > Kamu diizinkan :)"
   ;;
@@ -96,7 +96,7 @@ sudo hostnamectl set-hostname SETUP-BY-EVOTEAM
 figlet -c Instalation Success | lolcat
 echo " "
 echo "--------------------------------------------------------------------------------" | tee -a log-install.txt
-echo "================================= Premium Autoscript ===========================" | tee -a log-install.txt
+echo "========================== Premium Autoscript by EvoTeam =======================" | tee -a log-install.txt
 echo "--------------------------------------------------------------------------------" | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "   >>> Service & Port"  | tee -a log-install.txt
@@ -138,8 +138,8 @@ echo "   - Installation Log --> /root/log-install.txt"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "--------------------------------------------------------------------------------" | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
-echo "   - Script By               : EvoTeam " | tee -a log-install.txt
-echo "   - Telegram                : T.me/EvoTeamMalaysia"  | tee -a log-install.txt
+echo "   - Script By               : EvoTeamMalaysia " | tee -a log-install.txt
+echo "   - Telegram                : T.me/EvoTeamVPN"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "================================================================================" | tee -a log-install.txt
 echo "----------------------------- Created By EvoTeam -------------------------------" | tee -a log-install.txt
