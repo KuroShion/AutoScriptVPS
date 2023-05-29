@@ -7,7 +7,7 @@ echo "Checking VPS"
 IP=$(wget -qO- https://icanhazip.com);
 date=$(date +"%Y-%m-%d")
 clear
-echo " Enter Your Email To Receive Message"
+echo " Enter Your Email To Receive Backup Message"
 read -rp " Email: " -e email
 sleep 1
 echo Membuat Directory
