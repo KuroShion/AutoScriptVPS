@@ -6,7 +6,7 @@ MYIP=$(wget -qO- https://icanhazip.com);
 echo "Checking VPS"
 clear
 echo start
-sleep 0.5
+sleep 0.7
 source /var/lib/premium-script/ipvps.conf
 domain=$IP
 systemctl stop v2ray
@@ -16,3 +16,5 @@ systemctl stop v2ray@none
 systemctl start v2ray
 systemctl start v2ray@none
 echo Done 
+echo The System will reboot in 5 seconds
+reboot
