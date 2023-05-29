@@ -1,7 +1,7 @@
 #!/bin/bash
 # Debian 9 & 10 64bit
-# Ubuntu 18.04 & 20.04 bit
-# Centos 7 & 8 64bit 
+# Ubuntu 18.04 & 20.04 & 22.10 64bit
+# Centos 7 & 8 64bit (Patialy Supported)
 # By EvoTeamMalaysia
 # ==================================================
 
@@ -19,14 +19,14 @@ Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_p
 Info="${Green_font_prefix}[information]${Font_color_suffix}"
 
 if [[ -e /etc/wireguard/params ]]; then
-	echo -e "${Info} WireGuard sudah diinstal, silahkan ketik addwg untuk menambah client."
+	echo -e "${Info} WireGuard sudah diinstal, silahkan ketik add-wg untuk menambah client."
 	exit 1
 fi
 
 echo -e "${Info} Wireguard VPS AutoScript by EvoTeamMalaysia"
 # Detect public IPv4 address and pre-fill for the user
 
-# Detect public interface and pre-fill for the user
+# Detect public interface and pre-fill for the user	
 SERVER_PUB_NIC=$(ip -o $ANU -4 route show to default | awk '{print $5}');
 
 # Install WireGuard tools and module
