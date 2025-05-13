@@ -1,22 +1,117 @@
 <!DOCTYPE html>
-<style>
-.html-marquee {
-  height:200px;
-  width:950px;
-  background-color:#00ff00;
-  font-family:Georgia;
-  font-size:40px;
-  color:#ff0000;
-  font-style:italic;
-  font-weight:bold;
-  border-width:4;
-  border-style:dashed;
-  border-color:#0000ff;
-}
-</style>
-<marquee class="html-marquee" direction="up" behavior="alternate" scrollamount="7">
-<center>Created By EvoTeamMalaysia !!!</center>
-<center></center>
-<center>Huh~ What are you Finding ???</center>
-<center>Huh~ What are you Finding ???</center>
-</marquee>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Light blue background for a softer tone */
+            font-family: Arial, sans-serif;
+        }
+
+        .html-marquee {
+            height: 250px;
+            width: 80%;
+            margin: 50px auto;
+            background-color: #ffffff; /* White background for contrast */
+            font-family: "Trebuchet MS", sans-serif;
+            font-size: 24px;
+            color: #333333; /* Dark gray text for readability */
+            font-style: normal;
+            font-weight: bold;
+            border: 3px solid #4caf50; /* Green border for a fresh look */
+            border-radius: 15px; /* Rounded corners for a modern feel */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        marquee {
+            width: 100%;
+            color: #4caf50; /* Green text for a harmonious tone */
+        }
+
+        marquee div {
+            padding: 10px;
+        }
+
+        marquee p {
+            margin: 10px 0;
+        }
+
+        .contact-info {
+            margin: 20px auto;
+            text-align: center;
+            font-size: 18px;
+            color: #333333;
+        }
+
+        .contact-info a {
+            color: #4caf50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .custom-services {
+            margin: 30px auto;
+            text-align: center;
+            font-size: 20px;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        .live-time {
+            margin: 20px auto;
+            text-align: center;
+            font-size: 18px;
+            color: #4caf50;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const time = new Date().toLocaleTimeString('en-US', options);
+            document.getElementById('gmt-time').textContent = `Kuala Lumpur Time (GMT+8): ${time}`;
+        }
+        setInterval(updateTime, 1000);
+    </script>
+</head>
+<body>
+    <div class="html-marquee">
+        <marquee direction="up" behavior="alternate" scrollamount="5">
+            <div>
+                <p>🌟 Welcome to EvoTeamMalaysia! 🌟</p>
+                <p>✨ What are you looking for? ✨</p>
+                <p>💻 Premium Auto Script Services 💻</p>
+                <p>🚀 Fast, Reliable, and Secure 🚀</p>
+            </div>
+        </marquee>
+    </div>
+
+    <div class="custom-services">
+        <p>🔧 Need a Custom Auto Script? I Can Help! 🔧</p>
+        <p>Contact me for personalized auto script solutions tailored to your needs.</p>
+    </div>
+
+    <div class="contact-info">
+        <p>📞 Contact Us:</p>
+        <p>Telegram: <a href="https://t.me/EvoTeamMalaysia" target="_blank">@EvoTeamMalaysia</a></p>
+        <p>GitHub: <a href="https://github.com/EvoTeamMalaysia" target="_blank">github.com/EvoTeamMalaysia</a></p>
+    </div>
+
+    <div class="live-time">
+        <p id="gmt-time">Kuala Lumpur Time (GMT+8): Loading...</p>
+    </div>
+</body>
+</html>
