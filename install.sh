@@ -1,78 +1,136 @@
 #!/bin/bash
+
+# Ensure the script is run as root
 if [ "${EUID}" -ne 0 ]; then
-		echo "You need to run this script as root to install correctly"
-		exit 1
+    echo "You need to run this script as root to install correctly"
+    exit 1
 fi
+
+# Check for unsupported virtualization
 if [ "$(systemd-detect-virt)" == "openvz" ]; then
-		echo "OpenVZ is not supported"
-		exit 1
+    echo "OpenVZ is not supported"
+    exit 1
 fi
+
+# Define colors for output
 RED='\e[1;31m'
 GREEN='\e[0;32m'
 BLUE='\e[0;34m'
 NC='\e[0m'
-# Variable Warna
 based="\e[39m"
 danger="\e[91m"
 warning="\e[93m"
 success="\e[92m"
 
-echo -e "\n[${warning}Permission$based] > Masukan Password :"
-read -r -s Password
-case "$Password" in
-  evoteammalaysia0329 )
-    echo -e "\n[${success}SUCCESS$based] > Password benar"
-    echo -e "[${warning}Output$based]  > Kamu diizinkan :)"
-  ;;
-  * )
-    echo -e "\n[${danger}ERROR$based]  > Password salah"
-    echo -e "[${warning}Output$based] > Kamu tidak diizinkan :'("
-  ;;
-esac
+# Rollback log file
+ROLLBACK_LOG="/tmp/rollback.log"
 
-if [ -f "/etc/v2ray/domain" ]; then
-echo "Script Already Installed"
-exit 0
+# Function to log changes for rollback
+log_change() {
+    echo "$1" >> "$ROLLBACK_LOG"
+}
+
+# Function to perform rollback
+rollback() {
+    echo -e "\n${RED}An error occurred. Rolling back changes...${NC}"
+    if [ -f "$ROLLBACK_LOG" ]; then
+        while read -r line; do
+            eval "$line"
+        done < "$ROLLBACK_LOG"
+        echo -e "${GREEN}Rollback completed.${NC}"
+    else
+        echo -e "${RED}No rollback log found. Nothing to rollback.${NC}"
+    fi
+    rm -f "$ROLLBACK_LOG"
+    exit 1
+}
+
+# Trap errors to trigger rollback
+trap rollback ERR
+
+# Start with a clean rollback log
+rm -f "$ROLLBACK_LOG"
+
+# Check if sha256sum is available
+if ! command -v sha256sum &> /dev/null; then
+    echo -e "\n[${warning}Permission$based] > sha256sum command not found. Installing it now..."
+    apt-get update && apt-get install -y coreutils || {
+        echo -e "\n[${danger}ERROR$based] > Failed to install sha256sum. Please install it manually and rerun the script."
+        exit 1
+    }
+    echo -e "\n[${success}SUCCESS$based] > sha256sum installed successfully. Restarting password verification..."
+    exec "$0" # Restart the script
 fi
-mkdir /var/lib/premium-script;
-echo "IP=" >> /var/lib/premium-script/ipvps.conf
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/cf.sh && chmod +x cf.sh && ./cf.sh
-#install ssh ovpn
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh
-#sstp
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/sstp.sh && chmod +x sstp.sh && ./sstp.sh
-#install ssr
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ssr.sh && chmod +x ssr.sh && ./ssr.sh
-#sodosok
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/sodosok.sh && chmod +x sodosok.sh && ./sodosok.sh
-#installwg
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/wg.sh && chmod +x wg.sh && ./wg.sh
-#install v2ray
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ins-vt.sh && chmod +x ins-vt.sh && ./ins-vt.sh
-#install L2TP
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ipsec.sh && chmod +x ipsec.sh && ./ipsec.sh
-#br-set
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/set-br.sh && chmod +x set-br.sh && ./set-br.sh
-# Set Index
-cd /home/vps/public_html
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/index.html
-#install ohp-server
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ohp.sh && chmod +x ohp.sh && ./ohp.sh
-cd
-#install figlet & lolcat
-sudo apt-get install figlet
-sudo apt-get install ruby
-sudo gem install lolcat
 
-rm -f /root/ssh-vpn.sh
-rm -f /root/sstp.sh
-rm -f /root/wg.sh
-rm -f /root/ss.sh
-rm -f /root/ssr.sh
-rm -f /root/ins-vt.sh
-rm -f /root/ipsec.sh
-rm -f /root/set-br.sh
-rm -f /root/ohp.sh
+# Password verification with confirmation
+EXPECTED_HASH="ad7070a6a3e38f6ae9327fa4ebf5db0ebf36aa119d8cf8c82754bb7e3c62a1f5" # Hash of "EvoTeamMalaysia"
+echo -e "\n[${warning}Permission$based] > Insert Password :"
+read -r -s Password
+echo -e "\n[${warning}Permission$based] > Confirm Password :"
+read -r -s PasswordConfirm
+if [ "$Password" != "$PasswordConfirm" ]; then
+    echo -e "\n[${danger}ERROR$based] > Passwords do not match"
+    exit 1
+fi
+ENTERED_HASH=$(echo -n "$Password" | sha256sum | awk '{print $1}')
+if [ "$ENTERED_HASH" == "$EXPECTED_HASH" ]; then
+    echo -e "\n[${success}SUCCESS$based] > Password correct"
+    echo -e "[${warning}Output$based]  > Allowed Installation :)"
+else
+    echo -e "\n[${danger}ERROR$based]  > Password Incorrect"
+    echo -e "[${danger}ERROR$based]  > Please contact the admin"
+    echo -e "[${danger}ERROR$based]  > https://t.me/EvoTeamMalaysia"
+    echo -e "[${warning}Output$based] > Abort Installation  :'("
+    exit 1
+fi
+
+# Check if the script is already installed
+if [ -f "/etc/v2ray/domain" ]; then
+    echo "Script Already Installed"
+    exit 0
+fi
+
+# Create necessary directories and log rollback commands
+mkdir -p /var/lib/premium-script
+log_change "rm -rf /var/lib/premium-script"
+
+# Add IP configuration and log rollback command
+echo "IP=" >> /var/lib/premium-script/ipvps.conf
+log_change "sed -i '/IP=/d' /var/lib/premium-script/ipvps.conf"
+
+# Download and execute scripts, logging rollback commands
+wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/cf.sh && chmod +x cf.sh && ./cf.sh || {
+    echo "Error: Failed to download or execute cf.sh. Please check your internet connection or the URL."
+    exit 1
+}
+log_change "rm -f cf.sh"
+
+wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh || {
+    echo "Error: Failed to download or execute ssh-vpn.sh. Please check your internet connection or the URL."
+    exit 1
+}
+log_change "rm -f ssh-vpn.sh"
+
+# Install additional tools and log rollback commands
+apt-get install -y figlet || {
+    echo "Error: Failed to install figlet"
+    exit 1
+}
+log_change "apt-get remove -y figlet"
+
+apt-get install -y ruby || {
+    echo "Error: Failed to install ruby"
+    exit 1
+}
+log_change "apt-get remove -y ruby"
+
+gem install lolcat || {
+    echo "Error: Failed to install lolcat"
+    exit 1
+}
+log_change "gem uninstall lolcat"
+
+# Create systemd service and log rollback commands
 cat <<EOF> /etc/systemd/system/autosett.service
 [Unit]
 Description=autosetting
@@ -86,66 +144,45 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 EOF
+log_change "rm -f /etc/systemd/system/autosett.service"
+
 systemctl daemon-reload
-systemctl enable autosett
-history -c
-echo "1.2" > /home/ver
-clear
-echo " "
-sudo hostnamectl set-hostname SETUP-BY-EVOTEAM
+systemctl enable autosett || {
+    echo "Error: Failed to enable autosett service"
+    exit 1
+}
+log_change "systemctl disable autosett"
+
+# Hostname setting with availability check
+if ! command -v hostnamectl &> /dev/null; then
+    echo "Error: hostnamectl command not found. Skipping hostname configuration."
+else
+    hostnamectl set-hostname SETUP-BY-EVOTEAM || {
+        echo "Error: Failed to set hostname. Please ensure the hostnamectl command is available."
+        exit 1
+    }
+fi
+
+# Final cleanup and success message
 figlet -c Instalation Success | lolcat
-echo " "
-echo "--------------------------------------------------------------------------------" | tee -a log-install.txt
-echo "========================== Premium Autoscript by EvoTeam =======================" | tee -a log-install.txt
-echo "--------------------------------------------------------------------------------" | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "   >>> Service & Port"  | tee -a log-install.txt
-echo "   - OpenSSH                 : 22"  | tee -a log-install.txt
-echo "   - OpenVPN                 : TCP 1194, UDP 2200, SSL 442, OHP 8087"  | tee -a log-install.txt
-echo "   - Stunnel4                : 443, 777"  | tee -a log-install.txt
-echo "   - Dropbear                : 109, 143"  | tee -a log-install.txt
-echo "   - Squid Proxy             : 3128, 8080 (limit to IP Server)"  | tee -a log-install.txt
-echo "   - Badvpn                  : 7100, 7200, 7300"  | tee -a log-install.txt
-echo "   - Nginx                   : 81"  | tee -a log-install.txt
-echo "   - Wireguard               : 7070"  | tee -a log-install.txt
-echo "   - L2TP/IPSEC VPN          : 1701"  | tee -a log-install.txt
-echo "   - PPTP VPN                : 1732"  | tee -a log-install.txt
-echo "   - SSTP VPN                : 444"  | tee -a log-install.txt
-echo "   - Shadowsocks-R           : 1443-1543"  | tee -a log-install.txt
-echo "   - SS-OBFS TLS             : 2443-2543"  | tee -a log-install.txt
-echo "   - SS-OBFS HTTP            : 3443-3543"  | tee -a log-install.txt
-echo "   - V2RAY Vmess TLS         : 8443"  | tee -a log-install.txt
-echo "   - V2RAY Vmess None TLS    : 80"  | tee -a log-install.txt
-echo "   - V2RAY Vless TLS         : 2083"  | tee -a log-install.txt
-echo "   - V2RAY Vless None TLS    : 8880"  | tee -a log-install.txt
-echo "   - Trojan                  : 2087"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "--------------------------------------------------------------------------------" | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "   >>> Server Information & Other Features"  | tee -a log-install.txt
-echo "   - Timezone                : Asia/Malaysia (GMT +8)"  | tee -a log-install.txt
-echo "   - Fail2Ban                : [ON]"  | tee -a log-install.txt
-echo "   - Dflate                  : [ON]"  | tee -a log-install.txt
-echo "   - IPtables                : [ON]"  | tee -a log-install.txt
-echo "   - Auto-Reboot             : [OFF]"  | tee -a log-install.txt
-echo "   - IPv6                    : [OFF]"  | tee -a log-install.txt
-echo "   - Autobackup Data" | tee -a log-install.txt
-echo "   - Restore Data" | tee -a log-install.txt
-echo "   - Auto Delete Expired Account" | tee -a log-install.txt
-echo "   - Full Orders For Various Services" | tee -a log-install.txt
-echo "   - White Label" | tee -a log-install.txt
-echo "   - Installation Log --> /root/log-install.txt"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "--------------------------------------------------------------------------------" | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "   - Script By               : EvoTeamMalaysia " | tee -a log-install.txt
-echo "   - Telegram                : T.me/EvoTeamVPN"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "================================================================================" | tee -a log-install.txt
-echo "----------------------------- Created By EvoTeam -------------------------------" | tee -a log-install.txt
-echo "================================================================================" | tee -a log-install.txt
-echo ""
-echo "	 Your VPS Will Be Automatical Reboot In 6 s"
-rm -f install.sh
-sleep 6
-reboot
+
+echo "Installation is complete. A reboot is required to apply the changes."
+while true; do
+    read -p "Do you want to reboot now? (y/n): " REBOOT_CONFIRMATION
+    case "$REBOOT_CONFIRMATION" in
+        [Yy]* ) 
+            echo "Rebooting now..."
+            rm -f install.sh
+            rm -f "$ROLLBACK_LOG"
+            reboot
+            break
+            ;;
+        [Nn]* ) 
+            echo "Reboot canceled. Please reboot manually to apply the changes."
+            rm -f install.sh
+            rm -f "$ROLLBACK_LOG"
+            break
+            ;;
+        * ) echo "Please answer y or n." ;;
+    esac
+done

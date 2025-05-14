@@ -1,56 +1,80 @@
 #!/bin/bash
+
+# Define colors for output
 red='\e[1;31m'
 green='\e[0;32m'
+yellow='\e[1;33m'
+blue='\e[1;34m'
 NC='\e[0m'
-MYIP=$(wget -qO- https://icanhazip.com);
-echo "Checking VPS"
+
+# Get the server's public IP
+MYIP=$(wget -qO- https://icanhazip.com)
+
+# Display header
 clear
+echo -e "${blue}======================================${NC}"
+echo -e "${green}          VPS Port Management          ${NC}"
+echo -e "${blue}======================================${NC}"
 echo -e ""
-echo -e "======================================"
+
+# Display menu options
+echo -e "${yellow}     [1]  Change Port Stunnel4${NC}"
+echo -e "${yellow}     [2]  Change Port OpenVPN${NC}"
+echo -e "${yellow}     [3]  Change Port Wireguard${NC}"
+echo -e "${yellow}     [4]  Change Port Vmess${NC}"
+echo -e "${yellow}     [5]  Change Port Vless${NC}"
+echo -e "${yellow}     [6]  Change Port Trojan${NC}"
+echo -e "${yellow}     [7]  Change Port Squid${NC}"
+echo -e "${yellow}     [8]  Change Port SSTP${NC}"
+echo -e "${red}     [x]  Exit${NC}"
 echo -e ""
-echo -e "     [1]  Change Port Stunnel4"
-echo -e "     [2]  Change Port OpenVPN"
-echo -e "     [3]  Change Port Wireguard"
-echo -e "     [4]  Change Port Vmess"
-echo -e "     [5]  Change Port Vless"
-echo -e "     [6]  Change Port Trojan"
-echo -e "     [7]  Change Port Squid"
-echo -e "     [8]  Change Port SSTP"
-echo -e "     [x]  Exit"
-echo -e "======================================"
+echo -e "${blue}======================================${NC}"
 echo -e ""
-read -p "     Select From Options [1-8 or x] :  " port
+
+# Prompt user for input
+read -p "     Select From Options [1-8 or x]: " port
 echo -e ""
+
+# Handle user input
 case $port in
 1)
-port-ssl
-;;
+    echo -e "${green}Changing Port for Stunnel4...${NC}"
+    port-ssl
+    ;;
 2)
-port-ovpn
-;;
+    echo -e "${green}Changing Port for OpenVPN...${NC}"
+    port-ovpn
+    ;;
 3)
-port-wg
-;;
+    echo -e "${green}Changing Port for Wireguard...${NC}"
+    port-wg
+    ;;
 4)
-port-ws
-;;
+    echo -e "${green}Changing Port for Vmess...${NC}"
+    port-ws
+    ;;
 5)
-port-vless
-;;
+    echo -e "${green}Changing Port for Vless...${NC}"
+    port-vless
+    ;;
 6)
-port-tr
-;;
+    echo -e "${green}Changing Port for Trojan...${NC}"
+    port-tr
+    ;;
 7)
-port-squid
-;;
+    echo -e "${green}Changing Port for Squid...${NC}"
+    port-squid
+    ;;
 8)
-port-sstp
-;;
+    echo -e "${green}Changing Port for SSTP...${NC}"
+    port-sstp
+    ;;
 x)
-clear
-menu
-;;
+    echo -e "${red}Exiting to main menu...${NC}"
+    clear
+    menu
+    ;;
 *)
-echo "Please enter an correct number"
-;;
+    echo -e "${red}Invalid option. Please enter a correct number.${NC}"
+    ;;
 esac
