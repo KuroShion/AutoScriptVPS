@@ -63,7 +63,7 @@ if ! command -v sha256sum &> /dev/null; then
 fi
 
 # Password verification with confirmation
-EXPECTED_HASH="ad7070a6a3e38f6ae9327fa4ebf5db0ebf36aa119d8cf8c82754bb7e3c62a1f5" # Hash of "EvoTeamMalaysia"
+EXPECTED_HASH="d24abe59158f4d5118eec6f063c5b2e67844643d0d2ce9235728f79fb1de8021" # Hash of "EvoTeamMalaysia"
 echo -e "\n[${warning}Permission$based] > Insert Password :"
 read -r -s Password
 echo -e "\n[${warning}Permission$based] > Confirm Password :"
@@ -99,10 +99,7 @@ echo "IP=" >> /var/lib/premium-script/ipvps.conf
 log_change "sed -i '/IP=/d' /var/lib/premium-script/ipvps.conf"
 
 # Download and execute scripts, logging rollback commands
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/cf.sh && chmod +x cf.sh && ./cf.sh || {
-    echo "Error: Failed to download or execute cf.sh. Please check your internet connection or the URL."
-    exit 1
-}
+wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/cf.sh && chmod +x cf.sh && ./cf.sh
 log_change "rm -f cf.sh"
 
 wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh || {
