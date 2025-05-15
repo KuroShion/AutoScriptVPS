@@ -5,9 +5,6 @@ red='\e[1;31m'
 green='\e[0;32m'
 NC='\e[0m'
 
-# Enable strict error handling
-set -euo pipefail
-
 # Get the server's public IP
 MYIP=$(wget -qO- https://icanhazip.com)
 echo "Checking VPS"
