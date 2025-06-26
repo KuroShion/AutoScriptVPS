@@ -63,7 +63,7 @@ if ! command -v sha256sum &> /dev/null; then
 fi
 
 # Password verification with confirmation
-EXPECTED_HASH="d24abe59158f4d5118eec6f063c5b2e67844643d0d2ce9235728f79fb1de8021" # Hash of "EvoTeamMalaysia"
+EXPECTED_HASH="d24abe59158f4d5118eec6f063c5b2e67844643d0d2ce9235728f79fb1de8021" # Hash of "KuroShion"
 echo -e "\n[${warning}Permission$based] > Insert Password :"
 read -r -s Password
 echo -e "\n[${warning}Permission$based] > Confirm Password :"
@@ -79,7 +79,7 @@ if [ "$ENTERED_HASH" == "$EXPECTED_HASH" ]; then
 else
     echo -e "\n[${danger}ERROR$based]  > Password Incorrect"
     echo -e "[${danger}ERROR$based]  > Please contact the admin"
-    echo -e "[${danger}ERROR$based]  > https://t.me/EvoTeamMalaysia"
+    echo -e "[${danger}ERROR$based]  > https://t.me/KuroShion"
     echo -e "[${warning}Output$based] > Abort Installation  :'("
     exit 1
 fi
@@ -99,10 +99,10 @@ echo "IP=" >> /var/lib/premium-script/ipvps.conf
 log_change "sed -i '/IP=/d' /var/lib/premium-script/ipvps.conf"
 
 # Download and execute scripts, logging rollback commands
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/cf.sh && chmod +x cf.sh && ./cf.sh
+wget https://raw.githubusercontent.com/KuroShion/AutoScriptVPS/main/cf.sh && chmod +x cf.sh && ./cf.sh
 log_change "rm -f cf.sh"
 
-wget https://raw.githubusercontent.com/EvoTeamMalaysia/AutoScriptVPS/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh || {
+wget https://raw.githubusercontent.com/KuroShion/AutoScriptVPS/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh || {
     echo "Error: Failed to download or execute ssh-vpn.sh. Please check your internet connection or the URL."
     exit 1
 }
