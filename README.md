@@ -18,8 +18,8 @@ Welcome to **AutoScriptVPS**, a premium auto script designed for private use. Th
 ---
 
 ## Contact Information
-- **Telegram**: [@EvoTeamMalaysia](https://t.me/EvoTeamMalaysia)
-- **GitHub**: [EvoTeamMalaysia](https://github.com/EvoTeamMalaysia)
+- **Telegram**: [@EvoTeamMalaysia](https://t.me/KuroShion)
+- **GitHub**: [EvoTeamMalaysia](https://github.com/KuroShion)
 
 ---
 
